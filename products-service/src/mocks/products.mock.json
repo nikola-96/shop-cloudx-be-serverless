@@ -1,0 +1,16 @@
+[
+  {
+    "count": 1,
+    "description": "A very rare product for true lovers",
+    "id": "7567ec4b-b43c-48c5-9345-fc73c48a8023",
+    "price": 99999999.0,
+    "title": "Time machine"
+  },
+  {
+    "count": 1,
+    "description": "A rarely used spare tier",
+    "id": "8888ec4b-b43c-48c5-9345-fc73c48a8023",
+    "price": 1.99,
+    "title": "Spare tire"
+  }
+]
