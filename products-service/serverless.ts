@@ -7,6 +7,7 @@ const serverlessConfiguration: AWS = {
   service: "products-service",
   frameworkVersion: "3",
   plugins: [
+    "serverless-auto-swagger",
     "serverless-esbuild",
     "serverless-offline",
     "serverless-dotenv-plugin",
@@ -48,6 +49,12 @@ const serverlessConfiguration: AWS = {
     },
     "serverless-offline": {
       httpPort: 4000,
+    },
+    autoswagger: {
+      apiType: "httpApi",
+      generateSwaggerOnDeploy: true,
+      basePath: `/`,
+      typefiles: ["./src/types/product.ts"],
     },
   },
 };
