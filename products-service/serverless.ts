@@ -6,12 +6,17 @@ import getProductsById from "@functions/getProductsById";
 const serverlessConfiguration: AWS = {
   service: "products-service",
   frameworkVersion: "3",
-  plugins: ["serverless-esbuild", "serverless-offline"],
+  plugins: [
+    "serverless-esbuild",
+    "serverless-offline",
+    "serverless-dotenv-plugin",
+  ],
   provider: {
     name: "aws",
     runtime: "nodejs14.x",
     profile: "serverless-cloudx-js",
     region: "eu-west-1",
+    stage: process.env.STAGE,
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
@@ -19,6 +24,12 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
+    },
+    httpApi: {
+      cors: {
+        allowedOrigins: ["*"],
+        allowedMethods: ["GET"],
+      },
     },
   },
   // import the function via paths

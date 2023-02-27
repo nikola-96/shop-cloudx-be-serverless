@@ -4,7 +4,7 @@ import { middyfy } from "@libs/lambda";
 
 import { Product } from "@src/types/product";
 
-import productsMock from "@mocks/products.mock.json";
+import { productService } from "../../services";
 
 import schema from "./schema";
 
@@ -12,13 +12,18 @@ const getProductsById: ValidatedEventAPIGatewayProxyEvent<
   typeof schema
 > = async (event) => {
   const productId: string = event.pathParameters.productId;
-  const product: Product = productsMock.find(
-    ({ id }: { id: string }) => id === productId
-  );
+  const product: Product = await productService.getProductById(productId);
+  const response = product
+    ? {
+        statusCode: 200,
+        data: product,
+      }
+    : {
+        statusCode: 404,
+        data: "Product not found",
+      };
 
-  return formatJSONResponse({
-    data: product,
-  });
+  return formatJSONResponse(response);
 };
 
 export const main = middyfy(getProductsById);
