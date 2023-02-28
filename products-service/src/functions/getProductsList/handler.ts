@@ -6,7 +6,7 @@ import { productService } from "../../services";
 
 import schema from "./schema";
 
-const getProductsList: ValidatedEventAPIGatewayProxyEvent<
+export const getProductsList: ValidatedEventAPIGatewayProxyEvent<
   typeof schema
 > = async (_) => {
   const products = await productService.getProductsList();
