@@ -17,4 +17,8 @@ export default class ProductService extends BaseService {
       productId
     );
   }
+
+  async createProduct(data: Product): Promise<void> {
+    this.createEntity(data);
+  }
 }

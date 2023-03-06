@@ -1,0 +1,26 @@
+{
+    "id": {
+        "presence": {
+            "allowEmpty": false
+        },
+        "type": "string"
+    },
+    "description": {
+        "presence": {
+            "allowEmpty": false
+        },
+        "type": "string"
+    },
+    "price": {
+        "presence": {
+            "allowEmpty": false
+        },
+        "type": "number"
+    },
+    "title": {
+        "presence": {
+            "allowEmpty": false
+        },
+        "type": "string"
+    }
+}

@@ -15,6 +15,7 @@ export default abstract class BaseService {
 
     return result.Items as T[];
   }
+
   async getSingleValueFromTable<T>(
     keyIdentifier: string,
     value: string | number
@@ -27,5 +28,14 @@ export default abstract class BaseService {
       .promise();
 
     return result.Item as T;
+  }
+
+  async createEntity<T>(data: Partial<T>): Promise<void> {
+    await this.docClient
+      .put({
+        TableName: this.tableName,
+        Item: data,
+      })
+      .promise();
   }
 }
