@@ -25,11 +25,18 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
+      PRODUCTS_TABLE: process.env.PRODUCTS_TABLE,
+      STOCKS_TABLE: process.env.STOCKS_TABLE,
     },
     httpApi: {
       cors: {
         allowedOrigins: ["https://d1nzjjfu3ikc22.cloudfront.net"],
         allowedMethods: ["GET"],
+      },
+    },
+    iam: {
+      role: {
+        managedPolicies: ["arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"],
       },
     },
   },

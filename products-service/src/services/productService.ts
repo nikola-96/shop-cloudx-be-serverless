@@ -1,23 +1,20 @@
-import { ProductsList, Product } from "../types/product";
-import { productsListMock } from "../mocks";
+import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
-class ProductService {
+import { ProductsList, Product } from "../types/product";
+import BaseService from "./baseService";
+export default class ProductService extends BaseService {
+  constructor(docClient: DocumentClient, tableName: string) {
+    super(docClient, tableName);
+  }
+
   async getProductsList(): Promise<ProductsList> {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(productsListMock), 150);
-    });
+    return await this.getAllFromTable<Product>();
   }
 
   async getProductById(productId: string): Promise<Product | undefined> {
-    return new Promise((resolve) => {
-      setTimeout(
-        () => resolve(productsListMock.find(({ id }) => id === productId)),
-        150
-      );
-    });
+    return await this.getSingleValueFromTable<Product | undefined>(
+      "id",
+      productId
+    );
   }
 }
-
-const productService = new ProductService();
-
-export default productService;
