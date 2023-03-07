@@ -11,6 +11,7 @@ import schema from "./schema";
 export const createProduct: ValidatedEventAPIGatewayProxyEvent<
   typeof schema
 > = async (event) => {
+  console.log("Incoming event for createProduct fnc");
   const productModel = new ProductModel(event.body);
 
   try {
@@ -19,6 +20,9 @@ export const createProduct: ValidatedEventAPIGatewayProxyEvent<
       requestConstraints
     );
     await productService.createProduct(productModel.getEntityMappings());
+    console.log(
+      `Created products, product id: ${JSON.stringify(productModel.getId())}`
+    );
   } catch (error) {
     return formatJSONResponse(error);
   }

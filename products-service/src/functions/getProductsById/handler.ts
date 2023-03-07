@@ -11,24 +11,34 @@ import schema from "./schema";
 export const getProductsById: ValidatedEventAPIGatewayProxyEvent<
   typeof schema
 > = async (event) => {
-  const productId: string = event.pathParameters.productId;
-  const [product, stock]: [Product, Stock] = await Promise.all([
-    productService.getProductById(productId),
-    stockService.getSingleStock(productId),
-  ]);
+  console.log("Incoming event for getProductsById function");
+  try {
+    const productId: string = event.pathParameters.productId;
+    const [product, stock]: [Product, Stock] = await Promise.all([
+      productService.getProductById(productId),
+      stockService.getSingleStock(productId),
+    ]);
 
-  const productWithStock = { ...product, count: stock.count };
-  const response = product
-    ? {
-        statusCode: 200,
-        data: productWithStock,
-      }
-    : {
-        statusCode: 404,
-        data: "Product not found",
-      };
+    const productWithStock = { ...product, count: stock ? stock.count : null };
+    const response = product
+      ? {
+          statusCode: 200,
+          data: productWithStock,
+        }
+      : {
+          statusCode: 404,
+          data: "Product not found",
+        };
 
-  return formatJSONResponse(response);
+    console.log(`getProductById id value: ${JSON.stringify(product.id)}`);
+
+    return formatJSONResponse(response);
+  } catch (error) {
+    return formatJSONResponse({
+      statusCode: 500,
+      data: error,
+    });
+  }
 };
 
 export const main = middyfy(getProductsById);

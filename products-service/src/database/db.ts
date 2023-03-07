@@ -3,9 +3,9 @@ import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
 const generateAwsLocalConfig = () => {
   return {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.REGION,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID_LOCAL,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_LOCAL,
+    region: process.env.REGION_LOCAL,
     endpoint:
       process.env.DYNAMODB_ENDPOINT ||
       `https://dynamodb.${process.env.REGION}.amazonaws.com`,
