@@ -5,14 +5,18 @@
   "main": "serverless.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "sls offline"
+    "start": "sls offline",
+    "dynamodb-populate-tables": "./src/database/scripts/populate-database.bash"
   },
   "engines": {
     "node": ">=14.15.0"
   },
   "dependencies": {
     "@middy/core": "^3.4.0",
-    "@middy/http-json-body-parser": "^3.4.0"
+    "@middy/http-json-body-parser": "^3.4.0",
+    "aws-sdk": "^2.1327.0",
+    "uuid": "^9.0.0",
+    "validate.js": "^0.13.1"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.0.0",

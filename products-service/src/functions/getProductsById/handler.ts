@@ -2,28 +2,46 @@ import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
 import { formatJSONResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 
-import { Product } from "@src/types/product";
+import { Product, Stock } from "../../types";
 
-import { productService } from "../../services";
+import { productService, stockService } from "../../services";
 
 import schema from "./schema";
 
 export const getProductsById: ValidatedEventAPIGatewayProxyEvent<
   typeof schema
 > = async (event) => {
-  const productId: string = event.pathParameters.productId;
-  const product: Product = await productService.getProductById(productId);
-  const response = product
-    ? {
-        statusCode: 200,
-        data: product,
-      }
-    : {
-        statusCode: 404,
-        data: "Product not found",
-      };
+  console.log("Incoming event for getProductsById function");
+  try {
+    const productId: string = event.pathParameters.productId;
 
-  return formatJSONResponse(response);
+    const [product, stock]: [Product, Stock] = await Promise.all([
+      productService.getProductById(productId),
+      stockService.getSingleStock(productId),
+    ]);
+    if (!product)
+      return formatJSONResponse({ statusCode: 404, data: "Not found" });
+
+    const productWithStock = { ...product, count: stock ? stock.count : null };
+    const response = product
+      ? {
+          statusCode: 200,
+          data: productWithStock,
+        }
+      : {
+          statusCode: 404,
+          data: "Product not found",
+        };
+
+    console.log(`getProductById id value: ${JSON.stringify(product.id)}`);
+
+    return formatJSONResponse(response);
+  } catch (error) {
+    return formatJSONResponse({
+      statusCode: 500,
+      data: error,
+    });
+  }
 };
 
 export const main = middyfy(getProductsById);

@@ -6,7 +6,7 @@
       "@libs/*": ["src/libs/*"],
       "@mocks/*": ["src/mocks/*"],
       "@src/types/*" :["src/types/*"],
-      "@src/services/*":["src/services/*"]
+      "@services/*":["src/services/*"]
     }
   }
 }

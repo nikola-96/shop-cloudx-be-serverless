@@ -2,6 +2,7 @@ import type { AWS } from "@serverless/typescript";
 
 import getProductsList from "@functions/getProductsList";
 import getProductsById from "@functions/getProductsById";
+import createProduct from "@functions/createProduct";
 
 const serverlessConfiguration: AWS = {
   service: "products-service",
@@ -25,16 +26,23 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
+      PRODUCTS_TABLE: process.env.PRODUCTS_TABLE,
+      STOCKS_TABLE: process.env.STOCKS_TABLE,
     },
     httpApi: {
       cors: {
         allowedOrigins: ["https://d1nzjjfu3ikc22.cloudfront.net"],
-        allowedMethods: ["GET"],
+        allowedMethods: ["*"],
+      },
+    },
+    iam: {
+      role: {
+        managedPolicies: ["arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"],
       },
     },
   },
   // import the function via paths
-  functions: { getProductsList, getProductsById },
+  functions: { getProductsList, getProductsById, createProduct },
   package: { individually: true },
   custom: {
     esbuild: {
