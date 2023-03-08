@@ -6,12 +6,14 @@ export default class ProductModel {
   private _description: string;
   private _price: number;
   private _title: string;
+  private _count: number;
 
-  constructor({ id = UUID(), description, price, title }: Product) {
+  constructor({ id = UUID(), description, price, title, count = 0 }: Product) {
     this._id = id;
     this._description = description;
     this._price = price;
     this._title = title;
+    this._count = count;
   }
 
   /**
@@ -72,23 +74,46 @@ export default class ProductModel {
 
   /**
    * Get Price
-   * @return {string|*}
+   * @return {number|*}
    */
   getPrice() {
     return this._price;
   }
 
   /**
+   * Set Count
+   * @param value
+   */
+
+  setCount(value: number) {
+    this._count = value >= 0 ? value : 0;
+  }
+  /**
+   * Get Count
+   * @return {number|*}
+   */
+
+  getCount() {
+    return this._count;
+  }
+  /**
    * Get Base entity mappings
    * @return {IListInterface}
    */
 
-  getEntityMappings(): Product {
+  getEntityMappingsForProduct(): Product {
     return {
       id: this.getId(),
       description: this.getDescription(),
       price: this.getPrice(),
       title: this.getTitle(),
+    };
+  }
+
+  getEntityMappingsForAvailableProduct(): Product {
+    return {
+      ...this.getEntityMappingsForProduct(),
+      count: this.getCount(),
     };
   }
 }

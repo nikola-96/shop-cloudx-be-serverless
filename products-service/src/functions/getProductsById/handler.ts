@@ -14,10 +14,13 @@ export const getProductsById: ValidatedEventAPIGatewayProxyEvent<
   console.log("Incoming event for getProductsById function");
   try {
     const productId: string = event.pathParameters.productId;
+
     const [product, stock]: [Product, Stock] = await Promise.all([
       productService.getProductById(productId),
       stockService.getSingleStock(productId),
     ]);
+    if (!product)
+      return formatJSONResponse({ statusCode: 404, data: "Not found" });
 
     const productWithStock = { ...product, count: stock ? stock.count : null };
     const response = product

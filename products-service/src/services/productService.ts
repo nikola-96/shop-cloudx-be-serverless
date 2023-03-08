@@ -1,6 +1,6 @@
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
-import { ProductsList, Product } from "../types/product";
+import { ProductsList, Product, Stock } from "../types";
 import BaseService from "./baseService";
 export default class ProductService extends BaseService {
   constructor(docClient: DocumentClient, tableName: string) {
@@ -19,6 +19,6 @@ export default class ProductService extends BaseService {
   }
 
   async createProduct(data: Product): Promise<void> {
-    this.createEntity(data);
+    await this.createEntity(data);
   }
 }

@@ -22,5 +22,11 @@
             "allowEmpty": false
         },
         "type": "string"
+    },
+    "count": {
+        "presence": {
+            "allowEmpty": true
+        },
+        "type": "number"
     }
 }

@@ -2,7 +2,7 @@ import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
 import { formatJSONResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 
-import { productService } from "../../services";
+import { productService, stockService } from "../../services";
 import { validateAgainstConstraints } from "../../utils/validators";
 import requestConstraints from "../../constraint/product/create.product.constraint.json";
 import ProductModel from "src/models/productModel";
@@ -16,10 +16,20 @@ export const createProduct: ValidatedEventAPIGatewayProxyEvent<
 
   try {
     await validateAgainstConstraints(
-      productModel.getEntityMappings(),
+      productModel.getEntityMappingsForAvailableProduct(),
       requestConstraints
     );
-    await productService.createProduct(productModel.getEntityMappings());
+
+    Promise.all([
+      await productService.createProduct(
+        productModel.getEntityMappingsForProduct()
+      ),
+      await stockService.createSingleStock({
+        product_id: productModel.getId(),
+        count: productModel.getCount(),
+      }),
+    ]);
+
     console.log(
       `Created products, product id: ${JSON.stringify(productModel.getId())}`
     );
@@ -28,7 +38,7 @@ export const createProduct: ValidatedEventAPIGatewayProxyEvent<
   }
 
   return formatJSONResponse({
-    data: productModel.getEntityMappings(),
+    data: productModel.getEntityMappingsForAvailableProduct(),
     statusCode: 201,
   });
 };

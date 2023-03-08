@@ -15,4 +15,8 @@ export default class StockService extends BaseService {
   async getSingleStock(productId): Promise<Stock> {
     return await this.getSingleValueFromTable<Stock>("product_id", productId);
   }
+  
+  async createSingleStock(stockData: Stock): Promise<void> {
+    await this.createEntity(stockData);
+  }
 }
